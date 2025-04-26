@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-3xl mb-6 font-bold text-gray-800">Create a New Delivery Order</h2>
+<form method="post" class="max-w-lg bg-white p-8 rounded-lg shadow-lg border border-gray-300 space-y-6">
+  {% csrf_token %}
+  {% for field in form %}
+    <div>
+      <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-1">{{ field.label }}</label>
+      {{ field|as_widget(attrs={
+        'class': 'w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+        'placeholder': field.label
+      }) }}
+      {% if field.help_text %}
+        <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
+      {% endif %}
+      {% for error in field.errors %}
+        <p class="text-xs text-red-600 mt-1">{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endfor %}
+  <div class="flex justify-end space-x-4">
+    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded font-semibold shadow">Proceed to Billing</button>
+  </div>
+</form>
+{% if success %}
+  <div class="mt-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded shadow">
+    Order submitted successfully!
+  </div>
+{% endif %}
+{% endblock %}

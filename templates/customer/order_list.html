@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-2xl mb-4 font-semibold">My Orders</h2>
+
+<div class="mb-4 border-b border-gray-300">
+  <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+    <a href="#sent" class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" onclick="showTab('sent')">Orders I've Sent</a>
+    <a href="#received" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" onclick="showTab('received')">Orders I'm Receiving</a>
+  </nav>
+</div>
+
+<div id="sent" class="tab-content">
+  <table class="min-w-full divide-y divide-gray-200 border border-gray-300 rounded">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Pickup Location</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Destination Location</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ETA / Delivery Date</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Distance Away</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Assigned Vehicle</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Employee Contact</th>
+        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Verification</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      {% for order in orders %}
+      <tr>
+        <td class="px-4 py-2 whitespace-nowrap">{{ order.id }}</td>
+        <td class="px-4 py-2 whitespace-nowrap">
+          {% if order.status == 'pending' %}
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Pending</span>
+          {% elif order.status == 'assigned' %}
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Assigned</span>
+          {% elif order.status == 'in_transit' %}
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">In Transit</span>
+          {% elif order.status == 'delivered' %}
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Delivered</span>
+          {% else %}
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">{{ order.status }}</span>
+          {% endif %}
+        </td>
+        <td class="px-4 py-2 whitespace-nowrap">{{ order.location }}</td>
+        <td class="px-4 py-2 whitespace-nowrap">{{ order.destination }}</td>
+        <td class="px-4 py-2 whitespace-nowrap">{{ order.eta|default:"-" }}</td>
+        <td class="px-4 py-2 whitespace-nowrap">{{ order.distance_away|default:"-" }}</td>
+        <td class="px-4 py-2 whitespace-nowrap">{{ order.assigned_vehicle|default:"-" }}</td>
+        <td class="px-4 py-2 whitespace-nowrap">{{ order.employee_contact|default:"-" }}</td>
+        <td class="px-4 py-2 whitespace-nowrap">
+          {% if order.status == 'delivered' and not order.customer_verified %}
+            <form method="post" action="{% url 'customer:verify_order_completion' %}">
+              {% csrf_token %}
+              <input type="hidden" name="order_id" value="{{ order.id }}">
+              <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm font-semibold">Verify Completion</button>
+            </form>
+          {% elif order.customer_verified %}
+            <span class="text-green-600 font-semibold">Verified</span>
+          {% else %}
+            <span class="text-gray-500">-</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="9" class="px-4 py-2 text-center text-gray-500">No orders found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div id="received" class="tab-content hidden">
+  <p class="text-gray-500">No incoming orders to display yet.</p>
+</div>
+
+<script>
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(function(el) {
+    el.classList.add('hidden');
+  });
+  document.getElementById(tabId).classList.remove('hidden');
+
+  document.querySelectorAll('nav[aria-label="Tabs"] a').forEach(function(el) {
+    el.classList.remove('border-blue-500', 'text-blue-600');
+    el.classList.add('border-transparent', 'text-gray-500');
+  });
+  event.target.classList.add('border-blue-500', 'text-blue-600');
+  event.target.classList.remove('border-transparent', 'text-gray-500');
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DirectConnect</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<style>
+  /* Custom colors for red accent */
+  .text-red-accent {
+    color: #dc2626; /* Tailwind red-600 */
+  }
+  .bg-red-accent {
+    background-color: #dc2626;
+  }
+  .border-red-accent {
+    border-color: #dc2626;
+  }
+</style>
+</head>
+<body class="bg-white text-gray-800 flex min-h-screen">
+
+<!-- Sidebar -->
+<div class="w-64 bg-blue-600 text-white flex flex-col">
+  <div class="p-4 flex items-center space-x-2 border-b border-blue-700">
+    <!-- Simple Directconnect logo -->
+    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2 4 4 8-8 4 4v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+    <span class="font-bold text-xl">Directconnect</span>
+  </div>
+  <nav class="flex-1 p-4 space-y-2">
+    {% if user.is_authenticated and user.role %}
+      {% if user.role == 'customer' %}
+        <a href="{% url 'customer:dashboard' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/customer/dashboard/' %}bg-blue-700{% endif %}">Dashboard</a>
+        <a href="{% url 'customer:create_order' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/customer/create_order/' %}bg-blue-700{% endif %}">Create Order</a>
+        <a href="{% url 'customer:order_list' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/customer/order_list/' %}bg-blue-700{% endif %}">My Orders</a>
+        <a href="{% url 'customer:profile' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/customer/profile/' %}bg-blue-700{% endif %}">Profile</a>
+        <a href="{% url 'accounts:logout' %}" class="block px-3 py-2 rounded bg-red-accent hover:bg-red-700">Logout</a>
+      {% elif user.role == 'employee' %}
+        <a href="{% url 'employee:dashboard' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/employee/dashboard/' %}bg-blue-700{% endif %}">Dashboard</a>
+        <a href="{% url 'employee:assigned_orders' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/employee/assigned_orders/' %}bg-blue-700{% endif %}">Assigned Orders</a>
+        <a href="#" class="block px-3 py-2 rounded hover:bg-blue-500">Delivery Reports</a>
+        <a href="{% url 'employee:profile' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/employee/profile/' %}bg-blue-700{% endif %}">Profile</a>
+        <a href="{% url 'accounts:logout' %}" class="block px-3 py-2 rounded bg-red-accent hover:bg-red-700">Logout</a>
+      {% elif user.role == 'admin' %}
+        <a href="{% url 'adminpanel:dashboard' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/adminpanel/dashboard/' %}bg-blue-700{% endif %}">Dashboard</a>
+        <a href="{% url 'adminpanel:manage_users' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/adminpanel/users/manage/' %}bg-blue-700{% endif %}">Manage Users</a>
+        <a href="{% url 'adminpanel:all_orders' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/adminpanel/orders/all/' %}bg-blue-700{% endif %}">All Orders</a>
+        <a href="{% url 'adminpanel:employee_reports' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/adminpanel/reports/employees/' %}bg-blue-700{% endif %}">Employee Reports</a>
+        <a href="{% url 'adminpanel:financial_summary' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/adminpanel/reports/financial/' %}bg-blue-700{% endif %}">Financial Summary</a>
+        <a href="{% url 'adminpanel:profile' %}" class="block px-3 py-2 rounded hover:bg-blue-500 {% if request.path == '/adminpanel/profile/' %}bg-blue-700{% endif %}">Profile</a>
+        <a href="{% url 'accounts:logout' %}" class="block px-3 py-2 rounded bg-red-accent hover:bg-red-700">Logout</a>
+      {% endif %}
+    {% else %}
+      <a href="{% url 'accounts:login' %}" class="block px-3 py-2 rounded hover:bg-blue-500">Login</a>
+    {% endif %}
+  </nav>
+</div>
+
+<!-- Main content -->
+<div class="flex-1 p-6 overflow-auto">
+  {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>

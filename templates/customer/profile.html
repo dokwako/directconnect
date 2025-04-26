@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg mt-8">
+  <h1 class="text-2xl font-bold mb-4">Customer Profile</h1>
+  <div class="space-y-2">
+    <p><strong>Username:</strong> {{ customer_user.username }}</p>
+    <p><strong>Full Name:</strong> {{ customer_user.get_full_name }}</p>
+    <p><strong>Email:</strong> {{ customer_user.email }}</p>
+    <p><strong>Role:</strong> {{ customer_user.role|title }}</p>
+  </div>
+</div>
+{% endblock %}

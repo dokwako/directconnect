@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="space-y-6">
+  <h2 class="text-3xl font-semibold">Welcome back, {{ customer_name }}!</h2>
+
+  <div class="flex space-x-4">
+    <a href="{% url 'customer:create_order' %}" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white p-6 rounded shadow flex items-center justify-center space-x-2">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16m8-8H4"/></svg>
+      <span class="text-lg font-semibold">+ Create New Order</span>
+    </a>
+    <a href="{% url 'customer:order_list' %}" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white p-6 rounded shadow flex items-center justify-center space-x-2">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18M3 14h18M3 18h18"/></svg>
+      <span class="text-lg font-semibold">View My Sent & Received Orders</span>
+    </a>
+  </div>
+
+  <div class="bg-gray-100 p-4 rounded shadow max-w-md">
+    <h3 class="text-xl font-semibold mb-2">Recent Order Statuses</h3>
+    <ul class="space-y-1">
+      <li><span class="font-semibold">{{ in_transit_count }}</span> order{{ in_transit_count|pluralize }} in transit</li>
+      <li><span class="font-semibold">{{ delivered_count }}</span> order{{ delivered_count|pluralize }} delivered</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

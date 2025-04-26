@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg mt-8">
+  <div class="flex items-center space-x-4 mb-6">
+    <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-3xl font-bold">
+      {{ admin_user.username|slice:":1"|upper }}
+    </div>
+    <div>
+      <h1 class="text-2xl font-bold">{{ admin_user.get_full_name|default:admin_user.username }}</h1>
+      <p class="text-gray-600">{{ admin_user.email }}</p>
+      <p class="mt-1 inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-semibold">{{ admin_user.role|title }}</p>
+    </div>
+  </div>
+  <div class="space-y-4">
+    <div>
+      <h2 class="text-lg font-semibold text-gray-700">Profile Details</h2>
+      <ul class="list-disc list-inside text-gray-600 mt-2">
+        <li><strong>Username:</strong> {{ admin_user.username }}</li>
+        <li><strong>Full Name:</strong> {{ admin_user.get_full_name }}</li>
+        <li><strong>Email:</strong> {{ admin_user.email }}</li>
+        <li><strong>Role:</strong> {{ admin_user.role|title }}</li>
+      </ul>
+    </div>
+    {% if admin_user.role == 'employee' %}
+    <div>
+      <h2 class="text-lg font-semibold text-gray-700">Employee Info</h2>
+      <ul class="list-disc list-inside text-gray-600 mt-2">
+        <li><strong>Employee ID:</strong> {{ admin_user.employee_id }}</li>
+        <li><strong>Assigned Vehicles:</strong> {{ admin_user.assigned_vehicles|default:"None" }}</li>
+      </ul>
+    </div>
+    {% endif %}
+    {% if admin_user.role == 'customer' %}
+    <div>
+      <h2 class="text-lg font-semibold text-gray-700">Customer Info</h2>
+      <p class="text-gray-600 mt-2">Welcome back, valued customer!</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6 text-center">Add New Employee</h1>
+
+<div class="max-w-md mx-auto bg-white p-6 rounded shadow">
+  <form method="post" action="{% url 'adminpanel:add_employee' %}">
+    {% csrf_token %}
+    <div class="mb-4">
+      <label for="username" class="block text-gray-700 font-semibold mb-2">Username</label>
+      <input type="text" id="username" name="username" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+    <div class="mb-4">
+      <label for="email" class="block text-gray-700 font-semibold mb-2">Email (optional)</label>
+      <input type="email" id="email" name="email" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+    <div class="mb-4">
+      <label for="password" class="block text-gray-700 font-semibold mb-2">Password</label>
+      <input type="password" id="password" name="password" required class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+    </div>
+    <div class="flex justify-end">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-semibold">Add Employee</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
